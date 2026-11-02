@@ -1,0 +1,1 @@
+// Menu inicial que leva aos submenus. Usa os 4 outros menus e é usado pelo "main.rs"
