@@ -19,9 +19,30 @@ impl Usuario {
         }
     }
     
-    pub fn adiciona_grupo(&mut self, gid: u16) {
-            self.grupos_ids.push(gid);
+    pub fn adiciona_grupo(&mut self, uid: u16) {
+            self.grupos_ids.push(uid);
         }
+
+    pub fn listar_grupos(&self) {
+
+        if self.grupos_ids.len() == 0 {
+            println!("Nenhum grupo encontrado.");
+
+        } else {
+
+            for n in &self.grupos_ids {
+            println!("{}", n);
+            }
+
+        }
+    }
+
+    pub fn remove_grupo(&mut self, gid: u16) {
+        for n in 0..self.grupos_ids.len() {
+            if self.grupos_ids[n] == gid {
+                self.grupos_ids.remove(n);
+                break;
+            }
+        }
+    }
 }
-
-
