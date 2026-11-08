@@ -63,3 +63,77 @@ fn main() {
 let cinco = Some(5);
 let seis = mais_um(cinco);
 let nenhum = mais_um(None); */
+
+
+
+
+
+
+
+
+
+pub fn menu_usuarios(usuarios: &mut Vec<Usuario>) {
+    loop {
+        println!("--- Usuários ---\n");
+        println!("1. Criar usuário");
+        println!("2. Listar usuários");
+        println!("0. Voltar\n");
+
+        let mut entrada = String::new();
+        io::stdin().read_line(&mut entrada).expect("\nErro na leitura!\n");
+
+        match entrada.trim().parse::<u16>() {
+            Ok(opcao) => {
+                match opcao {
+
+                    1 => {println!("Vamos criar seu usuário\n Digite o nome: ");
+                    
+                    let mut nome = String::new();
+                    io::stdin().read_line(&mut nome).expect("\nErro na leitura\n");
+
+
+                    let mut uid: u16 = 0;
+
+                    loop{
+
+                        println!("Digite o uid: ");
+
+                        let mut entrada = String::new();
+                        io::stdin().read_line(&mut entrada).expect("\nErro na leitura\n");
+
+                        match entrada.trim().parse::<u16>() {
+                            
+                            Ok(numero) => {
+                                uid = numero;
+                                break;
+                            }
+
+                            Err(_) => {println!("Entrada inválida. Somente números são válidos!")}
+                        }
+
+                    }
+            
+                    let criado = Usuario::new(entrada.to_string(), uid);
+                    usuarios.push(criado);
+                    println!("Usuário criado!");
+                },
+
+
+                    2 => println!("Vamos listar os usuários existentes"),
+
+
+                    0 => break,
+
+
+                    _ => println!("\n{} não é uma opção válida.\n", opcao),
+                }
+            }
+            Err(_) => println!("\nEntrada inválida. Digite apenas números!\n"),
+        }
+
+        let criado = Usuario::new(entrada.to_string(), uid);
+        usuarios.push(criado);
+        println!("Usuário criado!");
+        break;
+    }
+}

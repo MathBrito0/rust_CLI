@@ -3,7 +3,54 @@
 // É usado pelo "menu_principal.rs".
 
 use std::io;
-use crate::modelos::usuario::Usuario;
+use crate::modelos::usuario::{self, Usuario};
+
+fn ler_numero() -> u16 {
+
+    loop {
+        let mut entrada = String::new();
+        io::stdin().read_line(&mut entrada).expect("\nErro na leitura\n");
+        
+        match entrada.trim().parse::<u16>() {
+            Ok(numero) => return numero,
+            Err(_) => println!("\nDigite um número válido!\n"),
+        }
+    }
+}
+
+
+
+
+
+
+fn ler_texto() -> String {
+    let mut texto = String::new();
+    io::stdin().read_line(&mut texto).expect("\nErro de letiura\n");
+    texto.trim().to_string();
+}
+
+
+
+
+
+
+fn criar_usuario(usuarios: &mut Vec<Usuario>) {
+
+}
+
+
+
+
+
+
+fn listar_usuario(usuarios: &Vec<Usuario>) {
+
+}
+
+
+
+
+
 
 pub fn menu_usuarios(usuarios: &mut Vec<Usuario>) {
     loop {
@@ -12,19 +59,14 @@ pub fn menu_usuarios(usuarios: &mut Vec<Usuario>) {
         println!("2. Listar usuários");
         println!("0. Voltar\n");
 
-        let mut entrada = String::new();
-        io::stdin().read_line(&mut entrada).expect("\nErro na leitura!\n");
+        let opcao = ler_numero();
 
-        match entrada.trim().parse::<u16>() {
-            Ok(opcao) => {
-                match opcao {
-                    1 => println!("Vamos criar seu usuário"),
-                    2 => println!("Vamos listar os usuários existentes"),
-                    0 => break,
-                    _ => println!("\n{} não é uma opção válida.\n", opcao),
-                }
-            }
-            Err(_) => println!("\nEntrada inválida. Digite apenas números!\n"),
+        match opcao {
+            
+            1 => criar_usuario,
+            2 => listar_usuario,
+            0 => break,
+            _ => println!("\nA opção {} não existe.\n", opcao),
         }
     }
 }
