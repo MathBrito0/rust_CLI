@@ -3,8 +3,9 @@
 // É usado pelo "menu_principal.rs".
 
 use std::io;
+use crate::modelos::usuario::Usuario;
 
-pub fn menu_usuarios() {
+pub fn menu_usuarios(usuarios: &mut Vec<Usuario>) {
     loop {
         println!("--- Usuários ---\n");
         println!("1. Criar usuário");

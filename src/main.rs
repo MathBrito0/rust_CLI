@@ -1,7 +1,6 @@
 // Tabalho de autoria da dupla:
 // Matheus Brito e Helen Midori
 
-use std::io;
 use crate::modelos::usuario::Usuario;
 use crate::modelos::grupo::Grupo;
 use crate::menus::menu_usuarios::menu_usuarios;
@@ -11,58 +10,7 @@ mod modelos;
 mod menus;
 
 fn main() {
-    
-    menu_usuarios();
+    let mut usuarios: Vec<Usuario> = Vec::new();
+    menu_usuarios(&mut usuarios);
 
-    let mut user1 = Usuario::new("Caio".to_string(), 2);
-    let mut user2 = Usuario::new("Julia".to_string(), 3);
-    println!("Atributos do primeiro usuário: Nome - {}, ID - {} e Qntd grupos - {}", user1.nome, user1.uid, user1.grupos_ids.len());
-    println!("Atributos do segundo usuário: Nome - {}, ID - {} e Qntd grupos - {}", user2.nome, user2.uid, user2.grupos_ids.len());
-
-
-    user1.listar_grupos();
-    user2.listar_grupos();
-
-    user1.adiciona_grupo(10);
-    user1.adiciona_grupo(20);
-    println!("-------- {} {} ---------", user1.nome, user1.grupos_ids.len());
-
-    user1.remove_grupo(20);
-    println!("-------- {} {} ---------", user1.nome, user1.grupos_ids.len());
-
-    println!("Atributos do primeiro usuário: Nome - {}, ID - {} e Qntd grupos - {}", user1.nome, user1.uid, user1.grupos_ids.len());
-    println!("Atributos do segundo usuário: Nome - {}, ID - {} e Qntd grupos - {}", user2.nome, user2.uid, user2.grupos_ids.len());
-
-
-
-    println!("Escreva seu nome: ");
-    let mut aka = String::new();
-
-    io::stdin()
-        .read_line(&mut aka)
-        .expect("Erro ao ler linha.");
-
-    println!("Olá, {}!\n", aka.trim());
-    
-    println!("Digite um número: ");
-
-    let mut entrada = String::new();
-    io::stdin()
-        .read_line(&mut entrada)
-        .expect("Erro ao ler número inserido.");
-
-    let numero: u16 = entrada.trim().parse().expect("Isso não é um número.");
-
-    println!("O dobro de {} é {}.", numero, numero * 2);
 }
-
-/* fn mais_um(x: Option<i32>) -> Option<i32> {
-    match x {
-        None => None,
-        Some => Some(i + 1),
-    }
-}
-
-let cinco = Some(5);
-let seis = mais_um(cinco);
-let nenhum = mais_um(None); */
