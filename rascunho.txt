@@ -49,7 +49,7 @@ fn main() {
 
 
 
-            *aprendendo sobre o uso de Option<T>:*
+            *APRENDENDO SOBRE O USO DE Option<T>:*
 
 
 
@@ -67,9 +67,26 @@ let nenhum = mais_um(None); */
 
 
 
+            *REVENDO MATCH PELA TERCEIRA VEZ*
+
+
+/* fn valor_em_cents(moeda: Moeda) -> u32 {
+    match moeda {
+        Moeda::Penny => {
+            println!("Moeda da sorte!");
+            1
+        },
+        Moeda::Nickel => 5,
+        Moeda::Dime => 10,
+        Moeda::Quarter => 25,
+    }
+}
+
+*/
 
 
 
+        *TENTATIVA FALHA DE USAR MATCH PARA FACILITAR O PROCESSO*
 
 
 pub fn menu_usuarios(usuarios: &mut Vec<Usuario>) {
