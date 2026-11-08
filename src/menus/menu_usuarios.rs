@@ -3,7 +3,7 @@
 // É usado pelo "menu_principal.rs".
 
 use std::io;
-use crate::modelos::usuario::{self, Usuario};
+use crate::modelos::usuario::Usuario;
 
 fn ler_numero() -> u16 {
 
@@ -26,7 +26,7 @@ fn ler_numero() -> u16 {
 fn ler_texto() -> String {
     let mut texto = String::new();
     io::stdin().read_line(&mut texto).expect("\nErro de letiura\n");
-    texto.trim().to_string();
+    texto.trim().to_string()
 }
 
 
@@ -35,7 +35,13 @@ fn ler_texto() -> String {
 
 
 fn criar_usuario(usuarios: &mut Vec<Usuario>) {
-
+    println!("Digite seu nome: ");
+    let nome = ler_texto();
+    println!("Digite o id desse usuário:");
+    let uid = ler_numero();
+    let novo = Usuario::new(nome, uid);
+    usuarios.push(novo);
+    println!("Usuário criado.");
 }
 
 
@@ -63,8 +69,8 @@ pub fn menu_usuarios(usuarios: &mut Vec<Usuario>) {
 
         match opcao {
             
-            1 => criar_usuario,
-            2 => listar_usuario,
+            1 => criar_usuario(usuarios),
+            2 => listar_usuario(usuarios),
             0 => break,
             _ => println!("\nA opção {} não existe.\n", opcao),
         }
