@@ -37,14 +37,13 @@ impl Grupo {
         }
     }
 
-    
+
     pub fn remove_membro(&mut self, uid: u16) {
         for n in 0..self.membros_uids.len() {
             if self.membros_uids[n] == uid {
                 self.membros_uids.remove(n);
                 break;
+            }
+        }
     }
-
-
-    
 }
