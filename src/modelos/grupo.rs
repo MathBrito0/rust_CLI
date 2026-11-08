@@ -2,7 +2,6 @@
 // Usa os métodos new, adiciona_membro, remove_membro, listar_membros.
 // É usado pelo "menu_grupos.rs" e "main.rs".
 
-
 pub struct Grupo {
     pub nome: String,
     pub gid: u16,
@@ -22,21 +21,15 @@ impl Grupo {
         self.membros_uids.push(gid);
     }
 
-    
     pub fn listar_membros(&self) {
-
         if self.membros_uids.len() == 0 {
             println!("Nenhum membro cadastrado.");
-        
         } else {
-
             for n in &self.membros_uids {
                 println!("{}", n);
             }
-        
         }
     }
-
 
     pub fn remove_membro(&mut self, uid: u16) {
         for n in 0..self.membros_uids.len() {

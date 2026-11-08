@@ -1,6 +1,6 @@
 -- MATHEUS:
 
-====================*DIFICULDADES, PESQUISAS E TENTATIVAS DE TESTES*====================
+====================*DIFICULDADES E TENTATIVAS DE TESTES*====================
 
 ====================*TESTE "EM TEMPO DE COMPILAÇÃO" DE USUÁRIO*====================
 

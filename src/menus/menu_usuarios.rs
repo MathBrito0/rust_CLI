@@ -2,16 +2,19 @@
 // Usa "Usuario".
 // É usado pelo "menu_principal.rs".
 
-use std::io;
-use crate::modelos::usuario::Usuario;
 use crate::modelos::grupo::Grupo;
+use crate::modelos::usuario::Usuario;
+use std::io;
+
+
 
 pub fn ler_numero() -> u16 {
-
     loop {
         let mut entrada = String::new();
-        io::stdin().read_line(&mut entrada).expect("\nErro na leitura\n");
-        
+        io::stdin()
+            .read_line(&mut entrada)
+            .expect("\nErro na leitura\n");
+
         match entrada.trim().parse::<u16>() {
             Ok(numero) => return numero,
             Err(_) => println!("\nDigite um número válido!\n"),
@@ -21,20 +24,23 @@ pub fn ler_numero() -> u16 {
 
 
 
-
-
-
 pub fn ler_texto() -> String {
     let mut texto = String::new();
-    io::stdin().read_line(&mut texto).expect("\nErro de letiura\n");
+    io::stdin()
+        .read_line(&mut texto)
+        .expect("\nErro de letiura\n");
     texto.trim().to_string()
 }
 
 
 
-
-pub fn muda_vinculo(usuarios: &mut Vec<Usuario>, grupos: &mut Vec<Grupo>, uid: u16, gid: u16, conectar: bool) {
-
+pub fn muda_vinculo(
+    usuarios: &mut Vec<Usuario>,
+    grupos: &mut Vec<Grupo>,
+    uid: u16,
+    gid: u16,
+    conectar: bool,
+) {
     let mut posicao_usuario = None;
     for i in 0..usuarios.len() {
         if usuarios[i].uid == uid {
@@ -51,38 +57,32 @@ pub fn muda_vinculo(usuarios: &mut Vec<Usuario>, grupos: &mut Vec<Grupo>, uid: u
         }
     }
 
-
     match (posicao_usuario, posicao_grupo) {
         (Some(id_usuario), Some(id_grupo)) => {
-            
             if conectar {
-
                 usuarios[id_usuario].adiciona_grupo(gid);
                 grupos[id_grupo].adiciona_membro(uid);
 
-                println!("\n Conexão criada com sucesso! Usuário {} foi adicionado ao Grupo {}.\n", uid, gid);
+                println!(
+                    "\n Conexão criada com sucesso! Usuário {} foi adicionado ao Grupo {}.\n",
+                    uid, gid
+                );
+            } else {
+                usuarios[id_usuario].remove_grupo(gid);
+                grupos[id_grupo].remove_membro(uid);
 
-        } else {
-
-            usuarios[id_usuario].remove_grupo(gid);
-            grupos[id_grupo].remove_membro(uid);
-
-            println!("\nConexão desfeita! Usuário {} não pertence mais ao Grupo {}.\n", uid, gid);
-
+                println!(
+                    "\nConexão desfeita! Usuário {} não pertence mais ao Grupo {}.\n",
+                    uid, gid
+                );
+            }
         }
-    }
 
         (None, Some(_)) => println!("\nUsuário não encontrado.\n"),
         (Some(_), None) => println!("\nGrupo não encontrado.\n"),
-        (None, None) => println!("\nNão foi encontrado nem grupo e nem usuário.\n")
+        (None, None) => println!("\nNão foi encontrado nem grupo e nem usuário.\n"),
     }
 }
-
-
-
-
-
-
 
 
 
@@ -98,9 +98,6 @@ fn criar_usuario(usuarios: &mut Vec<Usuario>) {
 
 
 
-
-
-
 fn listar_usuario(usuarios: &Vec<Usuario>) {
     if usuarios.len() == 0 {
         println!("Nenhum usuário cadastrado.");
@@ -113,6 +110,7 @@ fn listar_usuario(usuarios: &Vec<Usuario>) {
 }
 
 
+
 fn adicionar_grupo_usuario(usuarios: &mut Vec<Usuario>, grupos: &mut Vec<Grupo>) {
     println!("\nQual o uid do usuário: \n");
     let uid = ler_numero();
@@ -120,7 +118,6 @@ fn adicionar_grupo_usuario(usuarios: &mut Vec<Usuario>, grupos: &mut Vec<Grupo>)
     let gid = ler_numero();
 
     muda_vinculo(usuarios, grupos, uid, gid, true);
-
 }
 
 
@@ -132,7 +129,6 @@ fn remover_grupo_usuario(usuarios: &mut Vec<Usuario>, grupos: &mut Vec<Grupo>) {
     let gid = ler_numero();
 
     muda_vinculo(usuarios, grupos, uid, gid, false);
-
 }
 
 
@@ -153,13 +149,13 @@ fn listar_grupo_usuario(usuarios: &Vec<Usuario>) {
     }
 
     if existe {
-            println!("\nEste usuário faz parte dos seguintes grupos: \n");
-            usuarios[numero_chegada].listar_grupos();
-        } else {
-            println!("\nUsuário não encontrado.\n");
-        }
-
+        println!("\nEste usuário faz parte dos seguintes grupos: \n");
+        usuarios[numero_chegada].listar_grupos();
+    } else {
+        println!("\nUsuário não encontrado.\n");
+    }
 }
+
 
 
 pub fn menu_usuarios(usuarios: &mut Vec<Usuario>, grupos: &mut Vec<Grupo>) {
@@ -175,7 +171,6 @@ pub fn menu_usuarios(usuarios: &mut Vec<Usuario>, grupos: &mut Vec<Grupo>) {
         let opcao = ler_numero();
 
         match opcao {
-            
             1 => criar_usuario(usuarios),
             2 => listar_usuario(usuarios),
             3 => adicionar_grupo_usuario(usuarios, grupos),

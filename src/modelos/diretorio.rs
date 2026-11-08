@@ -2,8 +2,8 @@
 // Usa os métodos new, adiciona_arquivo, remove_arquivo, listar_conteudo.
 // Usa "arquivo.rs" e "permissao.rs".
 // É usado pelo "menu_diretorios.rs", "menu_arquivos.rs" e "main.rs".
-use crate::arquivo::Arquivo;
-use crate::permissao::Permissao;
+use crate::modelos::arquivo::Arquivo;
+use crate::modelos::permissao::Permissao;
 
 pub struct Diretorio {
     pub nome:String,

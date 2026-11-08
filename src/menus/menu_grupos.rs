@@ -21,6 +21,7 @@ fn criar_grupo(grupos: &mut Vec<Grupo>) {
 
 
 fn listar_grupo(grupos: &Vec<Grupo>) {
+    
     if grupos.len() == 0 {
         println!("Nenhum grupo registrado.");
         return;

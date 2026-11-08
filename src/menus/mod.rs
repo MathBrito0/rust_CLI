@@ -11,3 +11,5 @@
 pub mod menu_usuarios;
 pub mod menu_principal;
 pub mod menu_grupos;
+pub mod menu_arquivos;
+pub mod menu_diretorios;
