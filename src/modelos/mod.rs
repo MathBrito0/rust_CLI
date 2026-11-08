@@ -10,3 +10,6 @@
 
 pub mod usuario;
 pub mod grupo;
+pub mod arquivo;
+pub mod diretorio;
+pub mod permissao;
