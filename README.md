@@ -1,8 +1,8 @@
 -- MATHEUS:
 
-                *DIFICULDADES, PESQUISAS E TENTATIVAS DE TESTES*
+====================*DIFICULDADES, PESQUISAS E TENTATIVAS DE TESTES*====================
 
-                *TESTE DE USUÁRIO*
+====================*TESTE "EM TEMPO DE COMPILAÇÃO" DE USUÁRIO*====================
 
 fn main() {
     
@@ -53,14 +53,14 @@ fn main() {
 
 
 
-            *APRENDENDO SOBRE O USO DE Option<T>:*
+====================*APRENDENDO SOBRE O USO DE Option<T>:*====================
 
 
 
 /* fn mais_um(x: Option<i32>) -> Option<i32> {
     match x {
         None => None,
-        Some => Some(i + 1),
+        Some(i) => Some(i + 1),
     }
 }
 
@@ -71,7 +71,12 @@ let nenhum = mais_um(None); */
 
 
 
-            *REVENDO MATCH PELA TERCEIRA VEZ*
+
+
+
+
+====================*REVENDO MATCH PELA TERCEIRA VEZ*====================
+
 
 
 /* fn valor_em_cents(moeda: Moeda) -> u32 {
@@ -90,10 +95,13 @@ let nenhum = mais_um(None); */
 
 
 
-            *TENTATIVA FALHA DE USAR MATCH PARA FACILITAR O PROCESSO*
 
 
-pub fn menu_usuarios(usuarios: &mut Vec<Usuario>) {
+
+====================*TENTATIVA FALHA DE USAR MATCH PARA FACILITAR O PROCESSO*====================
+
+
+/* pub fn menu_usuarios(usuarios: &mut Vec<Usuario>) {
     loop {
         println!("--- Usuários ---\n");
         println!("1. Criar usuário");
@@ -158,3 +166,28 @@ pub fn menu_usuarios(usuarios: &mut Vec<Usuario>) {
         break;
     }
 }
+
+
+
+
+
+
+=======================*PERCEBI UM PROBLEMA NESSE TRECHO DO CÓDIGO*=====================
+
+
+pub fn remove_membro(&mut self, uid: u16) {
+        for n in 0..self.membros_uids.len() {
+            if self.membros_uids[n] == uid {
+                self.membros_uids.remove(n);
+                break;
+            }
+        }
+    }
+}
+
+
+
+quando eu crio um usuário e insiro ele em um grupo, ele não foi de fato adicionado lá.
+cada informação fica armazenada em seu respectivo arquivo, não acontece a associação entre os arquivos.
+se eu escolho o user1 para entrar no grupo1, quando eu passo para o menu dos grupos, o grupo1 nem existe.
+mesmo que eu tenha criado ele quando eu criei o usuário (no menu_usuario), o menu_grupos não recebeu essa informação de criação.

@@ -6,6 +6,7 @@ use crate::menus::menu_grupos::{menu_grupos};
 use crate::modelos::usuario::Usuario;
 use crate::modelos::grupo::Grupo;
 
+
 pub fn menu_principal(usuarios: &mut Vec<Usuario>, grupos: &mut Vec<Grupo>) {
    
     loop {
@@ -17,8 +18,8 @@ pub fn menu_principal(usuarios: &mut Vec<Usuario>, grupos: &mut Vec<Grupo>) {
         let opcao = ler_numero();
 
         match opcao {
-            1 => menu_usuarios(usuarios),
-            2 => menu_grupos(grupos),
+            1 => menu_usuarios(usuarios, grupos),
+            2 => menu_grupos(grupos, usuarios),
             
             3 => println!("pasta 'arquivos' em desenvolvimento."),  // MIDORI -- troca esse print pela função 'menu_arquivos(diretorios)'
             4 => println!("pasta 'diretórios' em desenvolvimento."),  // MIDORI -- troca esse print pela função 'menu_diretorios(diretorios)'
