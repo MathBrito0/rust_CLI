@@ -95,6 +95,15 @@ let nenhum = mais_um(None); */
 
 
 
+====================*LÓGICA DO NONE E DO SOME*====================
+
+
+
+
+Como rust não tem um "null" para indicar valores nulos, ele usa Some e None.
+Valores faltando em rust estão dentro do Option<T> e se encaixam no None.
+
+
 
 
 
