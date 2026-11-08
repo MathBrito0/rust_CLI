@@ -86,7 +86,7 @@ let nenhum = mais_um(None); */
 
 
 
-        *TENTATIVA FALHA DE USAR MATCH PARA FACILITAR O PROCESSO*
+            *TENTATIVA FALHA DE USAR MATCH PARA FACILITAR O PROCESSO*
 
 
 pub fn menu_usuarios(usuarios: &mut Vec<Usuario>) {
