@@ -12,8 +12,6 @@ mod menus;
 fn main() {
     let mut usuarios: Vec<Usuario> = Vec::new();
     let mut grupos: Vec<Grupo> = Vec::new();
-    let mut diretorios: Vec<Diretorio> = Vec::new();
-    let mut arquivos: Vec<Arquivos> = Vec::new();
 
 
     // MIDORI --    let mut diretorios: Vec<Diretorio> = Vec::new();
