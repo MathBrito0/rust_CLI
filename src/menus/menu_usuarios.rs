@@ -50,7 +50,14 @@ fn criar_usuario(usuarios: &mut Vec<Usuario>) {
 
 
 fn listar_usuario(usuarios: &Vec<Usuario>) {
+    if usuarios.len() == 0 {
+        println!("Nenhum usuário cadastrado.");
+        return;
+    }
 
+    for i in 0..usuarios.len() {
+        println!("{} tem o UID {}", usuarios[i].nome, usuarios[i].uid);
+    }
 }
 
 
