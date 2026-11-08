@@ -5,7 +5,7 @@
 use std::io;
 use crate::modelos::usuario::Usuario;
 
-fn ler_numero() -> u16 {
+pub fn ler_numero() -> u16 {
 
     loop {
         let mut entrada = String::new();
