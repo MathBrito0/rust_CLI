@@ -61,15 +61,65 @@ fn listar_usuario(usuarios: &Vec<Usuario>) {
 }
 
 
+fn adicionar_grupo_usuario(usuarios: &mut Vec<Usuario>) {
+    println!("\nQual o uid do usuário: \n");
+    let uid = ler_numero();
+    println!("\nDigite o gid do grupo: \n");
+    let gid = ler_numero();
+
+    let mut numero_chegada = 0;
+    let mut existe = false;
+
+    for i in 0..usuarios.len() {
+        if (usuarios[i].uid) == uid {
+            numero_chegada = i;
+            existe = true;
+            break;
+        }
+    }
+
+    if existe {
+            usuarios[numero_chegada].adiciona_grupo(gid);
+            println!("\nUsuário adicionado no grupo {}. \n", gid)
+        } else {
+            println!("\nUsuário não encontrado.\n");
+        }
+
+}
 
 
+fn listar_grupo_usuario(usuarios: &mut Vec<Usuario>) {
+    println!("\nQual o uid do usuário: \n");
+    let uid = ler_numero();
+
+    let mut numero_chegada = 0;
+    let mut existe = false;
+
+    for i in 0..usuarios.len() {
+        if (usuarios[i].uid) == uid {
+            numero_chegada = i;
+            existe = true;
+            break;
+        }
+    }
+
+    if existe {
+            println!("\nEste usuário faz parte dos seguintes grupos: \n");
+            usuarios[numero_chegada].listar_grupos();
+        } else {
+            println!("\nUsuário não encontrado.\n");
+        }
+
+}
 
 
 pub fn menu_usuarios(usuarios: &mut Vec<Usuario>) {
     loop {
-        println!("--- Usuários ---\n");
+        println!("\n--- Usuários ---\n");
         println!("1. Criar usuário");
         println!("2. Listar usuários");
+        println!("3. Adicionar grupo");
+        println!("4. Listar grupos de um usuário");
         println!("0. Voltar\n");
 
         let opcao = ler_numero();
@@ -78,6 +128,8 @@ pub fn menu_usuarios(usuarios: &mut Vec<Usuario>) {
             
             1 => criar_usuario(usuarios),
             2 => listar_usuario(usuarios),
+            3 => adicionar_grupo_usuario(usuarios),
+            4 => listar_grupo_usuario(usuarios),
             0 => break,
             _ => println!("\nA opção {} não existe.\n", opcao),
         }
