@@ -23,7 +23,7 @@ pub fn ler_numero() -> u16 {
 
 
 
-fn ler_texto() -> String {
+pub fn ler_texto() -> String {
     let mut texto = String::new();
     io::stdin().read_line(&mut texto).expect("\nErro de letiura\n");
     texto.trim().to_string()
@@ -88,7 +88,7 @@ fn adicionar_grupo_usuario(usuarios: &mut Vec<Usuario>) {
 }
 
 
-fn listar_grupo_usuario(usuarios: &mut Vec<Usuario>) {
+fn listar_grupo_usuario(usuarios: &Vec<Usuario>) {
     println!("\nQual o uid do usuário: \n");
     let uid = ler_numero();
 
