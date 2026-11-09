@@ -1,19 +1,3 @@
-use crate::menus::menu_principal::menu_principal;
-use crate::modelos::grupo::Grupo;
-use crate::modelos::usuario::Usuario;
-
-mod menus;
-mod modelos;
-
-fn main() {
-    let mut usuarios: Vec<Usuario> = Vec::new();
-    let mut grupos: Vec<Grupo> = Vec::new();
-
-    // MIDORI --    let mut diretorios: Vec<Diretorio> = Vec::new();
-
-    menu_principal(&mut usuarios, &mut grupos);
-}
-
 /*=========================Código Completo============================*/
 
 /*
@@ -22,7 +6,7 @@ fn main() {
 
     // Tabalho de autoria da dupla:
     // Helen Midori e Matheus Brito
-    
+
     ESTRUTURA ORIGINAL DO PROJETO (Modularizado):
     src/
     ├── main.rs
@@ -40,8 +24,8 @@ fn main() {
         ├── menu_principal.rs
         ├── menu_usuarios.rs
         └── mod.rs
-    
-    
+
+
     Tinhamos feito a estrutura com módulos para facilitar a divisão entre
     a dupla e para ficar melhor organizado.
 
@@ -50,24 +34,162 @@ fn main() {
     ====================================================================
 */
 
-
 // ====================================================================
 // MÓDULO: MODELOS (Origem: pasta src/modelos/)
 // ====================================================================
-
 
 pub mod modelos {
 
     // Origem: src/modelos/usuario.rs
     pub mod arquivo {
-        // Cole aqui todo o conteúdo de src/modelos/arquivo.rs
+        // Essa é a struct "Arquivo" com new, alterar_permissao e stat;
+        // Gauga 3 "Permissao" em uma tupla.
+        // Usa "permissao.rs".
+        // É usado por "diretorio.rs" e "menu_arquivos.rs";
+
+        use crate::modelos::permissao::Permissao;
+
+        pub struct Arquivo {
+            pub nome: String,
+            pub tamanho: u64,
+            pub permissoes: (Permissao, Permissao, Permissao),
+            pub uid_dono: u16,
+            pub gid_grupo: u16,
+        }
+
+        impl Arquivo {
+            pub fn new(nome: String, tamanho: u64, uid: u16, gid: u16) -> Arquivo {
+                let rw_dono = Permissao::new(true, true, false);
+                let rw_grupo = Permissao::new(true, true, false);
+                let r_outros = Permissao::new(true, false, false);
+                Arquivo {
+                    nome,
+                    tamanho,
+                    permissoes: (rw_dono, rw_grupo, r_outros),
+                    uid_dono: uid,
+                    gid_grupo: gid,
+                }
+            }
+
+            pub fn alterar_permissao(&mut self, permissoes: (Permissao, Permissao, Permissao)) {
+                self.permissoes = permissoes;
+            }
+
+            pub fn stat(&self) {
+                println!("Arquivo: {}", self.nome);
+                println!("Tamanho: {} bytes", self.tamanho);
+                print!(
+                    "Permissoes:({}{}{} / ",
+                    self.permissoes.0.octal(),
+                    self.permissoes.1.octal(),
+                    self.permissoes.2.octal()
+                );
+
+                if self.permissoes.0.leitura {
+                    print!("r");
+                } else {
+                    print!("-");
+                }
+                if self.permissoes.0.escrita {
+                    print!("w");
+                } else {
+                    print!("-");
+                }
+                if self.permissoes.0.execucao {
+                    print!("x");
+                } else {
+                    print!("-");
+                }
+
+                if self.permissoes.1.leitura {
+                    print!("r");
+                } else {
+                    print!("-");
+                }
+                if self.permissoes.1.escrita {
+                    print!("w");
+                } else {
+                    print!("-");
+                }
+                if self.permissoes.1.execucao {
+                    print!("x");
+                } else {
+                    print!("-");
+                }
+
+                if self.permissoes.2.leitura {
+                    print!("r");
+                } else {
+                    print!("-");
+                }
+                if self.permissoes.2.escrita {
+                    print!("w");
+                } else {
+                    print!("-");
+                }
+                if self.permissoes.2.execucao {
+                    print!("x");
+                } else {
+                    print!("-");
+                }
+                println!(")");
+
+                println!("Uid:{}", self.uid_dono);
+                println!("Gid:{}", self.gid_grupo);
+            }
+        }
     }
 
     // Origem: src/modelos/diretorio.rs
     pub mod diretorio {
-        // Colar aqui todo o conteúdo de src/modelos/diretorio.rs
-    }
+        // Struct "Diretorio" que guarda um vetor (Vec<Arquivo>).
+        // Usa os métodos new, adiciona_arquivo, remove_arquivo, listar_conteudo.
+        // Usa "arquivo.rs" e "permissao.rs".
+        // É usado pelo "menu_diretorios.rs", "menu_arquivos.rs" e "main.rs".
+        use crate::modelos::arquivo::Arquivo;
+        use crate::modelos::permissao::Permissao;
 
+        pub struct Diretorio {
+            pub nome: String,
+            pub arquivos: Vec<Arquivo>,
+            pub permissoes: (Permissao, Permissao, Permissao),
+            pub uid_dono: u16,
+        }
+
+        impl Diretorio {
+            pub fn new(
+                nome: String,
+                permissoes: (Permissao, Permissao, Permissao),
+                uid_dono: u16,
+            ) -> Diretorio {
+                Diretorio {
+                    nome,
+                    arquivos: Vec::new(),
+                    permissoes,
+                    uid_dono,
+                }
+            }
+
+            pub fn adiciona_arquivo(&mut self, arquivo: Arquivo) {
+                self.arquivos.push(arquivo);
+            }
+
+            pub fn remove_arquivo(&mut self, nome_arquivo: &str) {
+                for n in 0..self.arquivos.len() {
+                    if self.arquivos[n].nome == nome_arquivo {
+                        self.arquivos.remove(n);
+                        break;
+                    }
+                }
+            }
+
+            pub fn listar_conteudo(&self) {
+                for n in &self.arquivos {
+                    println!("{}", n.nome);
+                }
+            }
+        }
+    }
 
     // Origem: src/modelos/grupo.rs
     pub mod grupo {
@@ -115,12 +237,42 @@ pub mod modelos {
         }
     }
 
-
     // Origem: src/modelos/permissao.rs
     pub mod permissao {
-        // Cole aqui todo o conteúdo de src/modelos/permissao.rs
-    }
+        // É a struct "Permissao" (r -- w -- e) com new e octal.
+        // Não usa nenhum outro arquivo.
+        // É usado pelo "arquivo.rs", pelo "diretorio.rs" e
+        // pelos menus que criam ou alteram as permissões de usuário.
+        pub struct Permissao {
+            pub leitura: bool,
+            pub escrita: bool,
+            pub execucao: bool,
+        }
 
+        impl Permissao {
+            pub fn new(leitura: bool, escrita: bool, execucao: bool) -> Permissao {
+                Permissao {
+                    leitura,
+                    escrita,
+                    execucao,
+                }
+            }
+
+            pub fn octal(&self) -> u8 {
+                let mut total = 0;
+                if self.leitura {
+                    total += 4;
+                }
+                if self.escrita {
+                    total += 2;
+                }
+                if self.execucao {
+                    total += 1;
+                }
+                total
+            }
+        }
+    }
 
     // Origem: src/modelos/usuario.rs
     pub mod usuario {
@@ -169,30 +321,142 @@ pub mod modelos {
     }
 }
 
-
-
-
-
 // ====================================================================
 // MÓDULO: MENUS (Origem: pasta src/menus/)
 // ====================================================================
-
-
-
 
 pub mod menus {
 
     // Origem: src/menus/menu_arquivos.rs
     pub mod menu_arquivos {
-        // Cole aqui todo o conteúdo de src/menus/menu_arquivos.rs
-    }
+        // Tem as opções de criação de arquivo,
+        // alteração de permissão,
+        // verificar status,
+        // e delete
 
+        // Usa "Arquivo", "Permissao" e "Diretorio" e é usado pelo "menu_principal.rs"
+
+        use crate::menus::menu_usuarios::{ler_numero, ler_texto};
+        use crate::modelos::arquivo::{self, Arquivo};
+        use crate::modelos::diretorio::Diretorio;
+        use crate::modelos::permissao::Permissao;
+    }
 
     // Origem: src/menus/menu_diretorios.rs
     pub mod menu_diretorios {
-        // Cole aqui todo o conteúdo de src/menus/menu_diretorios.rs
-    }
+        // Cria diretórios, lista conteúdo e apaga
+        // Usa "Diretorio" e "Permissao"
+        // É usado pelo "menu_principal.rs"
 
+        use crate::menus::menu_usuarios::{ler_numero, ler_texto};
+        use crate::modelos::arquivo::Arquivo;
+        use crate::modelos::diretorio::Diretorio;
+        use crate::modelos::permissao::Permissao;
+        use std::io;
+
+        fn criar_diretorio(diretorios: &mut Vec<Diretorio>) {
+            println!("Nome do diretório:");
+            let nome_dir = ler_texto();
+
+            println!("UID Dono:");
+            let uid: u16 = ler_numero();
+
+            let p1 = Permissao::new(true, true, true);
+            let p2 = Permissao::new(true, true, true);
+            let p3 = Permissao::new(true, false, true);
+
+            let novo_dir = Diretorio::new(nome_dir, (p1, p2, p3), uid);
+            diretorios.push(novo_dir);
+            println!("Diretório criado.");
+        }
+
+        fn listar_diretorios(diretorios: &Vec<Diretorio>) {
+            for i in 0..diretorios.len() {
+                println!("{}", diretorios[i].nome);
+            }
+        }
+
+        fn editar_diretorio(diretorios: &mut Vec<Diretorio>) {
+            println!("Nome do diretório:");
+            let nome_dir = ler_texto();
+
+            for dir in diretorios.iter_mut() {
+                if dir.nome == nome_dir {
+                    println!("1.Adicionar arquivo");
+                    println!("2.Remover arquivo");
+                    println!("3.Listar conteúdo");
+
+                    let mut t = String::new();
+                    io::stdin().read_line(&mut t).expect("Erro ao ler");
+                    let opcao: u32 = t.trim().parse().expect("Digite um número");
+
+                    match opcao {
+                        1 => {
+                            println!("Digite o nome do arquivo: ");
+                            let nome = ler_texto();
+
+                            println!("Digite o tamanho do arquivo: ");
+                            let tamanho: u64 = ler_numero().into();
+
+                            println!("Digite o ID do usuário: ");
+                            let uid: u16 = ler_numero();
+
+                            println!("Digite o ID do grupo: ");
+                            let gid: u16 = ler_numero();
+
+                            let arq = Arquivo::new(nome, tamanho, uid, gid);
+                            dir.adiciona_arquivo(arq);
+                            println!("Arquivo adicionado.");
+                        }
+                        2 => {
+                            println!("Digite o nome do arquivo: ");
+                            let nome = ler_texto();
+                            dir.remove_arquivo(&nome);
+                            println!("O arquivo {} foi removido.", nome);
+                        }
+                        3 => dir.listar_conteudo(),
+                        _ => println!("Opção inválida."),
+                    }
+                    return;
+                }
+            }
+            println!("Diretório não encontrado.");
+        }
+
+        fn remover_diretorio(diretorios: &mut Vec<Diretorio>) {
+            println!("Nome do diretório:");
+            let nome_dir = ler_texto();
+
+            for i in 0..diretorios.len() {
+                if diretorios[i].nome == nome_dir {
+                    diretorios.remove(i);
+                    break;
+                }
+            }
+        }
+
+        pub fn menu_diretorios(arquivos: &mut Vec<Arquivo>, diretorios: &mut Vec<Diretorio>) {
+            loop {
+                println!("\n=== DIRETORIOS ===\n");
+                println!("1. Criar diretório");
+                println!("2. Listar diretórios");
+                println!("3. Editar diretório");
+                println!("4. Remover diretório");
+                println!("0. Voltar\n");
+
+                let opcao = ler_numero();
+
+                match opcao {
+                    1 => criar_diretorio(diretorios),
+                    2 => listar_diretorios(diretorios),
+                    3 => editar_diretorio(diretorios),
+                    4 => remover_diretorio(diretorios),
+                    0 => break,
+                    _ => println!("A opção {} não existe.", opcao),
+                }
+            }
+        }
+    }
 
     // Origem: src/menus/menu_grupos.rs
     pub mod menu_grupos {
@@ -292,22 +556,23 @@ pub mod menus {
         }
     }
 
-
-
     // Origem: src/menus/menu_principal.rs
     pub mod menu_principal {
         // Menu inicial que leva aos submenus. Usa os 4 outros menus e é usado pelo "main.rs"
 
         use crate::menus::menu_grupos::menu_grupos;
         use crate::menus::menu_usuarios::{ler_numero, menu_usuarios};
+        use crate::menus::menu_diretorios::{menu_diretorios};
         use crate::modelos::grupo::Grupo;
+        use crate::modelos::diretorio::Diretorio;
         use crate::modelos::usuario::Usuario;
 
-        pub fn menu_principal(usuarios: &mut Vec<Usuario>, grupos: &mut Vec<Grupo>) {
+        pub fn menu_principal(usuarios: &mut Vec<Usuario>, grupos: &mut Vec<Grupo>, diretorios: &mut Vec<Diretorio>) {
             loop {
                 println!("=== MENU PRINCIPAL ===");
                 println!("1. Menu dos usuários.");
                 println!("2. Menu dos grupos.");
+                println!("3. Menu dos diretórios.");
                 println!("0. Finalizar o programa.");
 
                 let opcao = ler_numero();
@@ -315,9 +580,7 @@ pub mod menus {
                 match opcao {
                     1 => menu_usuarios(usuarios, grupos),
                     2 => menu_grupos(grupos, usuarios),
-
-                    3 => println!("pasta 'arquivos' em desenvolvimento."), // MIDORI -- troca esse print pela função 'menu_arquivos(diretorios)'
-                    4 => println!("pasta 'diretórios' em desenvolvimento."), // MIDORI -- troca esse print pela função 'menu_diretorios(diretorios)'
+                    3 => menu_diretorios(diretorios),
 
                     0 => break,
                     _ => println!("Essa opção é inválida."),
@@ -325,7 +588,6 @@ pub mod menus {
             }
         }
     }
-
 
     // Origem: src/menus/menu_usuarios.rs
     pub mod menu_usuarios {
@@ -501,12 +763,15 @@ pub mod menus {
 // FUNÇÃO PRINCIPAL (Origem: src/main.rs)
 // ====================================================================
 
+use crate::menus::menu_principal::menu_principal;
+use crate::modelos::grupo::Grupo;
+use crate::modelos::usuario::Usuario;
 
 fn main() {
     let mut usuarios: Vec<Usuario> = Vec::new();
     let mut grupos: Vec<Grupo> = Vec::new();
 
-    // MIDORI --    let mut diretorios: Vec<Diretorio> = Vec::new();
+    let mut diretorios: Vec<Diretorio> = Vec::new();
 
     menu_principal(&mut usuarios, &mut grupos);
 }
