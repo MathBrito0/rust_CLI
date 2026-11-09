@@ -13,6 +13,7 @@ pub fn menu_principal(usuarios: &mut Vec<Usuario>, grupos: &mut Vec<Grupo>) {
         println!("=== MENU PRINCIPAL ===");
         println!("1. Menu dos usuários.");
         println!("2. Menu dos grupos.");
+        println!("3. Menu dos diretórios.");
         println!("0. Finalizar o programa.");
 
         let opcao = ler_numero();
@@ -21,8 +22,8 @@ pub fn menu_principal(usuarios: &mut Vec<Usuario>, grupos: &mut Vec<Grupo>) {
             1 => menu_usuarios(usuarios, grupos),
             2 => menu_grupos(grupos, usuarios),
             
-            3 => println!("pasta 'arquivos' em desenvolvimento."),  // MIDORI -- troca esse print pela função 'menu_arquivos(diretorios)'
-            4 => println!("pasta 'diretórios' em desenvolvimento."),  // MIDORI -- troca esse print pela função 'menu_diretorios(diretorios)'
+            3 => menu_diretorios(diretorios),
+            4 => println!("pasta 'diretórios' em desenvolvimento."),  // menu arquivos 
            
             0 => break,
             _ => println!("Essa opção é inválida."),
