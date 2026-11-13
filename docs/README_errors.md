@@ -1,6 +1,6 @@
--- MATHEUS:
-
 ====================*DIFICULDADES E TENTATIVAS DE TESTES*====================
+
+
 
 ====================*TESTE "EM TEMPO DE COMPILAÇÃO" DE USUÁRIO*====================
 
@@ -53,6 +53,14 @@ fn main() {
 
 
 
+
+
+
+
+
+
+
+
 ====================*APRENDENDO SOBRE O USO DE Option<T>:*====================
 
 
@@ -95,6 +103,13 @@ let nenhum = mais_um(None); */
 
 
 
+
+
+
+
+
+
+
 ====================*LÓGICA DO NONE E DO SOME*====================
 
 
@@ -102,6 +117,14 @@ let nenhum = mais_um(None); */
 
 Como rust não tem um "null" para indicar valores nulos, ele usa Some e None.
 Valores faltando em rust estão dentro do Option<T> e se encaixam no None.
+
+
+
+
+
+
+
+
 
 
 
@@ -175,6 +198,11 @@ Valores faltando em rust estão dentro do Option<T> e se encaixam no None.
         break;
     }
 }
+
+
+
+
+
 
 
 
