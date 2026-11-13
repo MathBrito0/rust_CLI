@@ -1,0 +1,202 @@
+-- MATHEUS:
+
+====================*DIFICULDADES E TENTATIVAS DE TESTES*====================
+
+====================*TESTE "EM TEMPO DE COMPILAÇÃO" DE USUÁRIO*====================
+
+fn main() {
+    
+    menu_usuarios();
+
+    let mut user1 = Usuario::new("Caio".to_string(), 2);
+    let mut user2 = Usuario::new("Julia".to_string(), 3);
+    println!("Atributos do primeiro usuário: Nome - {}, ID - {} e Qntd grupos - {}", user1.nome, user1.uid, user1.grupos_ids.len());
+    println!("Atributos do segundo usuário: Nome - {}, ID - {} e Qntd grupos - {}", user2.nome, user2.uid, user2.grupos_ids.len());
+
+
+    user1.listar_grupos();
+    user2.listar_grupos();
+
+    user1.adiciona_grupo(10);
+    user1.adiciona_grupo(20);
+    println!("-------- {} {} ---------", user1.nome, user1.grupos_ids.len());
+
+    user1.remove_grupo(20);
+    println!("-------- {} {} ---------", user1.nome, user1.grupos_ids.len());
+
+    println!("Atributos do primeiro usuário: Nome - {}, ID - {} e Qntd grupos - {}", user1.nome, user1.uid, user1.grupos_ids.len());
+    println!("Atributos do segundo usuário: Nome - {}, ID - {} e Qntd grupos - {}", user2.nome, user2.uid, user2.grupos_ids.len());
+
+
+
+    println!("Escreva seu nome: ");
+    let mut aka = String::new();
+
+    io::stdin()
+        .read_line(&mut aka)
+        .expect("Erro ao ler linha.");
+
+    println!("Olá, {}!\n", aka.trim());
+    
+    println!("Digite um número: ");
+
+    let mut entrada = String::new();
+    io::stdin()
+        .read_line(&mut entrada)
+        .expect("Erro ao ler número inserido.");
+
+    let numero: u16 = entrada.trim().parse().expect("Isso não é um número.");
+
+    println!("O dobro de {} é {}.", numero, numero * 2);
+}
+
+
+
+
+====================*APRENDENDO SOBRE O USO DE Option<T>:*====================
+
+
+
+/* fn mais_um(x: Option<i32>) -> Option<i32> {
+    match x {
+        None => None,
+        Some(i) => Some(i + 1),
+    }
+}
+
+let cinco = Some(5);
+let seis = mais_um(cinco);
+let nenhum = mais_um(None); */
+
+
+
+
+
+
+
+
+====================*REVENDO MATCH PELA TERCEIRA VEZ*====================
+
+
+
+/* fn valor_em_cents(moeda: Moeda) -> u32 {
+    match moeda {
+        Moeda::Penny => {
+            println!("Moeda da sorte!");
+            1
+        },
+        Moeda::Nickel => 5,
+        Moeda::Dime => 10,
+        Moeda::Quarter => 25,
+    }
+}
+
+*/
+
+
+
+====================*LÓGICA DO NONE E DO SOME*====================
+
+
+
+
+Como rust não tem um "null" para indicar valores nulos, ele usa Some e None.
+Valores faltando em rust estão dentro do Option<T> e se encaixam no None.
+
+
+
+
+
+====================*TENTATIVA FALHA DE USAR MATCH PARA FACILITAR O PROCESSO*====================
+
+
+/* pub fn menu_usuarios(usuarios: &mut Vec<Usuario>) {
+    loop {
+        println!("--- Usuários ---\n");
+        println!("1. Criar usuário");
+        println!("2. Listar usuários");
+        println!("0. Voltar\n");
+
+        let mut entrada = String::new();
+        io::stdin().read_line(&mut entrada).expect("\nErro na leitura!\n");
+
+        match entrada.trim().parse::<u16>() {
+            Ok(opcao) => {
+                match opcao {
+
+                    1 => {println!("Vamos criar seu usuário\n Digite o nome: ");
+                    
+                    let mut nome = String::new();
+                    io::stdin().read_line(&mut nome).expect("\nErro na leitura\n");
+
+
+                    let mut uid: u16 = 0;
+
+                    loop{
+
+                        println!("Digite o uid: ");
+
+                        let mut entrada = String::new();
+                        io::stdin().read_line(&mut entrada).expect("\nErro na leitura\n");
+
+                        match entrada.trim().parse::<u16>() {
+                            
+                            Ok(numero) => {
+                                uid = numero;
+                                break;
+                            }
+
+                            Err(_) => {println!("Entrada inválida. Somente números são válidos!")}
+                        }
+
+                    }
+            
+                    let criado = Usuario::new(entrada.to_string(), uid);
+                    usuarios.push(criado);
+                    println!("Usuário criado!");
+                },
+
+
+                    2 => println!("Vamos listar os usuários existentes"),
+
+
+                    0 => break,
+
+
+                    _ => println!("\n{} não é uma opção válida.\n", opcao),
+                }
+            }
+            Err(_) => println!("\nEntrada inválida. Digite apenas números!\n"),
+        }
+
+        let criado = Usuario::new(entrada.to_string(), uid);
+        usuarios.push(criado);
+        println!("Usuário criado!");
+        break;
+    }
+}
+
+
+
+
+
+
+=======================*PERCEBI UM PROBLEMA NESSE TRECHO DO CÓDIGO*=====================
+
+
+pub fn remove_membro(&mut self, uid: u16) {
+        for n in 0..self.membros_uids.len() {
+            if self.membros_uids[n] == uid {
+                self.membros_uids.remove(n);
+                break;
+            }
+        }
+    }
+}
+
+
+
+quando eu crio um usuário e insiro ele em um grupo, ele não foi de fato adicionado lá.
+cada informação fica armazenada em seu respectivo arquivo, não acontece a associação entre os arquivos.
+se eu escolho o user1 para entrar no grupo1, quando eu passo para o menu dos grupos, o grupo1 nem existe.
+mesmo que eu tenha criado ele quando eu criei o usuário (no menu_usuario), o menu_grupos não recebeu essa informação de criação.
