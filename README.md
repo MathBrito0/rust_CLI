@@ -1,41 +1,46 @@
-# 🐧 Simulador de Sistema de Arquivos estilo Unix em Rust
+<div align="center">
 
-[![Rust](https://img.shields.io/badge/Rust-ED3311?style=for-the-badge&logo=rust&logoColor=white)](https://www.rust-lang.org/)
-[![Status](https://img.shields.io/badge/Status-Concluído-success?style=for-the-badge)](https://github.com/seu-usuario/seu-repositorio)
+# 🐧 Simulador de Sistema de Arquivos Unix em Rust
 
-Projeto desenvolvido em dupla com o objetivo de simular funcionalidades fundamentais de um sistema operacional estilo Unix (como gerenciamento de usuários, grupos, diretórios, arquivos e permissões de acesso). 
+**Gerenciamento de usuários, grupos, diretórios e permissões via linha de comando (CLI).**
 
-O projeto foi escrito em **Rust**, aproveitando a segurança de tipos e o sistema estrito de gerenciamento de memória da linguagem.
+[![Rust](https://img.shields.io/badge/Rust-Version_1.85-ED3311?style=for-the-badge&logo=rust&logoColor=white)](https://www.rust-lang.org/)
+[![Cargo](https://img.shields.io/badge/Build-Cargo-F05032?style=for-the-badge&logo=rust&logoColor=white)](https://doc.rust-lang.org/cargo/)
+[![Status](https://img.shields.io/badge/Status-Concluído-2ea44f?style=for-the-badge)]()
 
----
+[Sobre o Projeto](#-sobre-o-projeto) • [Arquitetura](#-arquitetura-e-módulos) • [Como Executar](#-como-executar) • [Diário Técnico](./docs/README.md)
 
-## 🛠️ Arquitetura do Projeto
-
-Embora o código tenha passado por um processo de consolidação para atender a requisitos acadêmicos específicos de submissão, a arquitetura original foi pensada de forma estritamente modular:
-
-* **`modelos/`**: Contém as estruturas de dados principais (`Structs` e seus métodos):
-  * `usuario.rs`: Gerenciamento de UIDs e vínculos com grupos.
-  * `grupo.rs`: Gerenciamento de GIDs e listas de membros.
-  * `diretorio.rs`: Estrutura de diretórios contendo vetores de arquivos.
-  * `arquivo.rs`: Metadados do arquivo, tamanhos e donos.
-  * `permissao.rs`: Controle de permissões (Leitura, Escrita, Execução) e conversão para formato octal (estilo chmod).
-* **`menus/`**: Camada de interface de linha de comando (CLI) interativa para manipulação de cada entidade.
+</div>
 
 ---
 
-## 🚀 Funcionalidades
+## 📖 Sobre o Projeto
 
-- **Usuários & Grupos:** Criação, listagem e associação de usuários a grupos do sistema.
-- **Diretórios:** Criação, remoção e navegação/edição do conteúdo de diretórios.
-- **Arquivos:** Criação de arquivos dentro de diretórios específicos, consulta de metadados (`stat`), alteração de permissões e remoção.
+Este projeto é uma aplicação de linha de comando desenvolvida em **Rust** que simula o comportamento lógico de um sistema de arquivos e controle de acesso baseado em sistemas operacionais **Unix/Linux**.
+
+O foco principal do desenvolvimento foi aplicar conceitos fundamentais de Sistemas Operacionais — como identificação por `UID`/`GID`, hierarquia de diretórios e cálculo de permissões octais (`rwx`) — aliados às garantias de segurança de memória (*ownership* e *borrowing*) da linguagem Rust.
+
+> [!NOTE]
+> **Nota sobre a versão do repositório:** Este repositório mantém a arquitetura **modular original** em pastas e arquivos separados para facilitar a leitura e manutenção. Para detalhes sobre como o projeto foi adaptado para um único arquivo (`main.rs`) para entrega acadêmica e os desafios enfrentados com o compilador, consulte o nosso **[Diário de Bordo Técnico](./docs/README.md)**.
 
 ---
 
-## 💻 Como Executar
+## 🏗️ Arquitetura e Módulos
 
-Certifique-se de ter o [Rust e o Cargo](https://www.rust-lang.org/tools/install) instalados em sua máquina.
+O sistema foi projetado separando as regras de negócio (`modelos`) da interface de interação com o usuário (`menus`):
 
-1. Clone o repositório:
-   ```bash
-   git clone [https://github.com/seu-usuario/seu-repositorio.git](https://github.com/seu-usuario/seu-repositorio.git)
-   cd seu-repositorio
+```text
+src/
+├── main.rs                 # Ponto de entrada e inicialização dos vetores em memória
+├── modelos/                # Entidades e regras de negócio (Structs & Impls)
+│   ├── usuario.rs          # Gestão de usuários e vínculos com grupos
+│   ├── grupo.rs            # Gestão de grupos e listas de membros
+│   ├── diretorio.rs        # Contêiner hierárquico que armazena arquivos
+│   ├── arquivo.rs          # Metadados, tamanho, dono e exibição estilo `stat`
+│   └── permissao.rs        # Lógica booleana (r, w, x) e conversão para octal
+└── menus/                  # Camada de interação via terminal (CLI)
+    ├── menu_principal.rs   # Roteador central dos submenus
+    ├── menu_usuarios.rs    # CRUD de usuários e helpers de leitura
+    ├── menu_grupos.rs      # CRUD de grupos e associações
+    ├── menu_diretorios.rs  # Criação e edição de diretórios
+    └── menu_arquivos.rs    # Criação, alteração de permissões e status de arquivos
