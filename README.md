@@ -1,202 +1,41 @@
--- MATHEUS:
+# 🐧 Simulador de Sistema de Arquivos estilo Unix em Rust
 
-====================*DIFICULDADES E TENTATIVAS DE TESTES*====================
+[![Rust](https://img.shields.io/badge/Rust-ED3311?style=for-the-badge&logo=rust&logoColor=white)](https://www.rust-lang.org/)
+[![Status](https://img.shields.io/badge/Status-Concluído-success?style=for-the-badge)](https://github.com/seu-usuario/seu-repositorio)
 
-====================*TESTE "EM TEMPO DE COMPILAÇÃO" DE USUÁRIO*====================
+Projeto desenvolvido em dupla com o objetivo de simular funcionalidades fundamentais de um sistema operacional estilo Unix (como gerenciamento de usuários, grupos, diretórios, arquivos e permissões de acesso). 
 
-fn main() {
-    
-    menu_usuarios();
+O projeto foi escrito em **Rust**, aproveitando a segurança de tipos e o sistema estrito de gerenciamento de memória da linguagem.
 
-    let mut user1 = Usuario::new("Caio".to_string(), 2);
-    let mut user2 = Usuario::new("Julia".to_string(), 3);
-    println!("Atributos do primeiro usuário: Nome - {}, ID - {} e Qntd grupos - {}", user1.nome, user1.uid, user1.grupos_ids.len());
-    println!("Atributos do segundo usuário: Nome - {}, ID - {} e Qntd grupos - {}", user2.nome, user2.uid, user2.grupos_ids.len());
+---
 
+## 🛠️ Arquitetura do Projeto
 
-    user1.listar_grupos();
-    user2.listar_grupos();
+Embora o código tenha passado por um processo de consolidação para atender a requisitos acadêmicos específicos de submissão, a arquitetura original foi pensada de forma estritamente modular:
 
-    user1.adiciona_grupo(10);
-    user1.adiciona_grupo(20);
-    println!("-------- {} {} ---------", user1.nome, user1.grupos_ids.len());
+* **`modelos/`**: Contém as estruturas de dados principais (`Structs` e seus métodos):
+  * `usuario.rs`: Gerenciamento de UIDs e vínculos com grupos.
+  * `grupo.rs`: Gerenciamento de GIDs e listas de membros.
+  * `diretorio.rs`: Estrutura de diretórios contendo vetores de arquivos.
+  * `arquivo.rs`: Metadados do arquivo, tamanhos e donos.
+  * `permissao.rs`: Controle de permissões (Leitura, Escrita, Execução) e conversão para formato octal (estilo chmod).
+* **`menus/`**: Camada de interface de linha de comando (CLI) interativa para manipulação de cada entidade.
 
-    user1.remove_grupo(20);
-    println!("-------- {} {} ---------", user1.nome, user1.grupos_ids.len());
+---
 
-    println!("Atributos do primeiro usuário: Nome - {}, ID - {} e Qntd grupos - {}", user1.nome, user1.uid, user1.grupos_ids.len());
-    println!("Atributos do segundo usuário: Nome - {}, ID - {} e Qntd grupos - {}", user2.nome, user2.uid, user2.grupos_ids.len());
+## 🚀 Funcionalidades
 
+- **Usuários & Grupos:** Criação, listagem e associação de usuários a grupos do sistema.
+- **Diretórios:** Criação, remoção e navegação/edição do conteúdo de diretórios.
+- **Arquivos:** Criação de arquivos dentro de diretórios específicos, consulta de metadados (`stat`), alteração de permissões e remoção.
 
+---
 
-    println!("Escreva seu nome: ");
-    let mut aka = String::new();
+## 💻 Como Executar
 
-    io::stdin()
-        .read_line(&mut aka)
-        .expect("Erro ao ler linha.");
+Certifique-se de ter o [Rust e o Cargo](https://www.rust-lang.org/tools/install) instalados em sua máquina.
 
-    println!("Olá, {}!\n", aka.trim());
-    
-    println!("Digite um número: ");
-
-    let mut entrada = String::new();
-    io::stdin()
-        .read_line(&mut entrada)
-        .expect("Erro ao ler número inserido.");
-
-    let numero: u16 = entrada.trim().parse().expect("Isso não é um número.");
-
-    println!("O dobro de {} é {}.", numero, numero * 2);
-}
-
-
-
-
-====================*APRENDENDO SOBRE O USO DE Option<T>:*====================
-
-
-
-/* fn mais_um(x: Option<i32>) -> Option<i32> {
-    match x {
-        None => None,
-        Some(i) => Some(i + 1),
-    }
-}
-
-let cinco = Some(5);
-let seis = mais_um(cinco);
-let nenhum = mais_um(None); */
-
-
-
-
-
-
-
-
-====================*REVENDO MATCH PELA TERCEIRA VEZ*====================
-
-
-
-/* fn valor_em_cents(moeda: Moeda) -> u32 {
-    match moeda {
-        Moeda::Penny => {
-            println!("Moeda da sorte!");
-            1
-        },
-        Moeda::Nickel => 5,
-        Moeda::Dime => 10,
-        Moeda::Quarter => 25,
-    }
-}
-
-*/
-
-
-
-====================*LÓGICA DO NONE E DO SOME*====================
-
-
-
-
-Como rust não tem um "null" para indicar valores nulos, ele usa Some e None.
-Valores faltando em rust estão dentro do Option<T> e se encaixam no None.
-
-
-
-
-
-====================*TENTATIVA FALHA DE USAR MATCH PARA FACILITAR O PROCESSO*====================
-
-
-/* pub fn menu_usuarios(usuarios: &mut Vec<Usuario>) {
-    loop {
-        println!("--- Usuários ---\n");
-        println!("1. Criar usuário");
-        println!("2. Listar usuários");
-        println!("0. Voltar\n");
-
-        let mut entrada = String::new();
-        io::stdin().read_line(&mut entrada).expect("\nErro na leitura!\n");
-
-        match entrada.trim().parse::<u16>() {
-            Ok(opcao) => {
-                match opcao {
-
-                    1 => {println!("Vamos criar seu usuário\n Digite o nome: ");
-                    
-                    let mut nome = String::new();
-                    io::stdin().read_line(&mut nome).expect("\nErro na leitura\n");
-
-
-                    let mut uid: u16 = 0;
-
-                    loop{
-
-                        println!("Digite o uid: ");
-
-                        let mut entrada = String::new();
-                        io::stdin().read_line(&mut entrada).expect("\nErro na leitura\n");
-
-                        match entrada.trim().parse::<u16>() {
-                            
-                            Ok(numero) => {
-                                uid = numero;
-                                break;
-                            }
-
-                            Err(_) => {println!("Entrada inválida. Somente números são válidos!")}
-                        }
-
-                    }
-            
-                    let criado = Usuario::new(entrada.to_string(), uid);
-                    usuarios.push(criado);
-                    println!("Usuário criado!");
-                },
-
-
-                    2 => println!("Vamos listar os usuários existentes"),
-
-
-                    0 => break,
-
-
-                    _ => println!("\n{} não é uma opção válida.\n", opcao),
-                }
-            }
-            Err(_) => println!("\nEntrada inválida. Digite apenas números!\n"),
-        }
-
-        let criado = Usuario::new(entrada.to_string(), uid);
-        usuarios.push(criado);
-        println!("Usuário criado!");
-        break;
-    }
-}
-
-
-
-
-
-
-=======================*PERCEBI UM PROBLEMA NESSE TRECHO DO CÓDIGO*=====================
-
-
-pub fn remove_membro(&mut self, uid: u16) {
-        for n in 0..self.membros_uids.len() {
-            if self.membros_uids[n] == uid {
-                self.membros_uids.remove(n);
-                break;
-            }
-        }
-    }
-}
-
-
-
-quando eu crio um usuário e insiro ele em um grupo, ele não foi de fato adicionado lá.
-cada informação fica armazenada em seu respectivo arquivo, não acontece a associação entre os arquivos.
-se eu escolho o user1 para entrar no grupo1, quando eu passo para o menu dos grupos, o grupo1 nem existe.
-mesmo que eu tenha criado ele quando eu criei o usuário (no menu_usuario), o menu_grupos não recebeu essa informação de criação.
+1. Clone o repositório:
+   ```bash
+   git clone [https://github.com/seu-usuario/seu-repositorio.git](https://github.com/seu-usuario/seu-repositorio.git)
+   cd seu-repositorio
