@@ -1,8 +1,12 @@
 <div align="center">
+  <img
+    src="./banner-unix-rust.png"
+    alt="Banner do Simulador de Sistema de Arquivos Unix em Rust"
+    width="100%"
+  >
+</div>
 
-# 🐧 Simulador de Sistema de Arquivos Unix em Rust
-
-**Gerenciamento de usuários, grupos, diretórios e permissões via linha de comando (CLI).**
+---
 
 [![Rust](https://img.shields.io/badge/Rust-2021_Edition-ED3311?style=for-the-badge&logo=rust&logoColor=white)](https://www.rust-lang.org/)
 [![Cargo](https://img.shields.io/badge/Build-Cargo-F05032?style=for-the-badge&logo=rust&logoColor=white)](https://doc.rust-lang.org/cargo/)
@@ -114,7 +118,7 @@ Gid:100
 
 ## 👥 Autores
 
-| Desenvolvedor | GitHub | 
-| :--- | :--- |
-| **Matheus Brito** | [@MathBrito0](https://github.com/MathBrito0) |
-| **Helen Midori** | [@komodospit](https://github.com/komodospit) |
+| Desenvolvedores | 
+| :--- |
+| [@MathBrito0](https://github.com/MathBrito0) |
+| [@komodospit](https://github.com/komodospit) |
