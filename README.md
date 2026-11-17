@@ -1,6 +1,6 @@
 <div align="center">
   <img
-    src="./banner-unix-rust.png"
+    src="assets/rust_cli.png"
     alt="Banner do Simulador de Sistema de Arquivos Unix em Rust"
     width="100%"
   >
