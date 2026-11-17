@@ -4,9 +4,6 @@
     ====================================================================
     PROJETO: rust_CLI
 
-    // Tabalho de autoria da dupla:
-    // Helen Midori e Matheus Brito
-
     ESTRUTURA ORIGINAL DO PROJETO (Modularizado):
     src/
     ├── main.rs
