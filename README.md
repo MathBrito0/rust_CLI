@@ -1,9 +1,5 @@
 <div align="center">
-  <img
-    src="assets/rust_cli.png"
-    alt="Banner do Simulador de Sistema de Arquivos Unix em Rust"
-    width="100%"
-  >
+  <img src="/assets/rust_cli.png" alt="Banner for the Unix File System Simulator in Rust" width="100%">
 </div>
 
 ---
