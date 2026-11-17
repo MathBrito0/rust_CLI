@@ -10,115 +10,113 @@
 
 [![Rust](https://img.shields.io/badge/Rust-2021_Edition-ED3311?style=for-the-badge&logo=rust&logoColor=white)](https://www.rust-lang.org/)
 [![Cargo](https://img.shields.io/badge/Build-Cargo-F05032?style=for-the-badge&logo=rust&logoColor=white)](https://doc.rust-lang.org/cargo/)
-[![Status](https://img.shields.io/badge/Status-Concluído-2ea44f?style=for-the-badge)]()
+[![Status](https://img.shields.io/badge/Status-Completed-2ea44f?style=for-the-badge)]()
 
-[Sobre o Projeto](#-sobre-o-projeto) • [Arquitetura](#-arquitetura-e-módulos) • [Como Executar](#-como-executar) • [Diário Técnico](./docs/README.md)
+[About the Project](#-about-the-project) • [Architecture](#-architecture-and-modules) • [How to Run](#-how-to-run) • [Technical Journal](./docs/README.md)
 
 </div>
 
 ---
 
-## 📖 Sobre o Projeto
+## 📖 About the Project
 
-Este projeto é uma aplicação de linha de comando desenvolvida em **Rust** que simula o comportamento lógico de um sistema de arquivos e controle de acesso baseado em sistemas operacionais **Unix/Linux**.
+This project is a command-line application developed in **Rust** that simulates the logical behavior of a file system and access control, modeled after **Unix/Linux** operating systems.
 
-O foco principal do desenvolvimento foi aplicar conceitos fundamentais de Sistemas Operacionais — como identificação por `UID`/`GID`, hierarquia de diretórios e cálculo de permissões octais (`rwx`) — aliados às garantias de segurança de memória (*ownership* e *borrowing*) da linguagem Rust.
+The primary focus of the development was to apply fundamental Operating System concepts—such as `UID`/`GID` identification, directory hierarchy, and the calculation of octal permissions (`rwx`)—while leveraging the memory safety guarantees (*ownership* and *borrowing*) provided by the Rust programming language.
 
 > [!NOTE]
-> **Nota sobre a organização do repositório:** Este repositório mantém a arquitetura **modular original** em pastas e arquivos separados para facilitar a leitura e manutenção. Para detalhes sobre como o projeto foi adaptado para um único arquivo (`main.rs`) para entrega acadêmica e os desafios enfrentados com o compilador, consulte o nosso **[Diário de Bordo Técnico](./docs/README.md)**.
+> **Note on repository organization:** This repository maintains the **original modular architecture**, with code organized into separate folders and files to facilitate readability and maintenance. For details on how the project was adapted into a single file (`main.rs`) for academic submission, as well as the challenges encountered with the compiler, please refer to our **[Technical Journal](./docs/README.md)**. ---
 
----
+## 🏗️ Architecture and Modules
 
-## 🏗️ Arquitetura e Módulos
-
-O sistema foi projetado separando as regras de negócio (`modelos`) da interface de interação com o usuário (`menus`):
+The system is designed by separating business logic (`models`) from the user interaction interface (`menus`):
 
 ```text
 src/
-├── main.rs                 # Ponto de entrada e inicialização dos vetores em memória
-├── modelos/                # Entidades e regras de negócio (Structs & Impls)
-│   ├── usuario.rs          # Gestão de usuários e vínculos com grupos
-│   ├── grupo.rs            # Gestão de grupos e listas de membros
-│   ├── diretorio.rs        # Contêiner hierárquico que armazena arquivos
-│   ├── arquivo.rs          # Metadados, tamanho, dono e exibição estilo `stat`
-│   └── permissao.rs        # Lógica booleana (r, w, x) e conversão para octal
-└── menus/                  # Camada de interação via terminal (CLI)
-    ├── menu_principal.rs   # Roteador central dos submenus
-    ├── menu_usuarios.rs    # CRUD de usuários e helpers de leitura
-    ├── menu_grupos.rs      # CRUD de grupos e associações
-    ├── menu_diretorios.rs  # Criação e edição de diretórios
-    └── menu_arquivos.rs    # Criação, alteração de permissões e status de arquivos
+├── main.rs                   # Entry point and in-memory vector initialization
+├── models/                   # Entities and business logic (Structs & Impls)
+│   ├── users.rs              # User management and group associations
+│   ├── groups.rs             # Group management and member lists
+│   ├── directories.rs        # Hierarchical container for storing files
+│   ├── archives.rs           # Metadata, size, owner, and `stat`-style display
+│   └── permissions.rs        # Boolean logic (r, w, x) and octal conversion
+└── menus/                    # Terminal-based interaction layer (CLI)
+├── main_menu.rs              # Central router for submenus
+├── users_menu.rs             # User CRUD operations and input helpers
+├── group_menu.rs             # Group CRUD operations and associations
+├── dir_menu.rs               # Directory creation and editing
+└── archives_menu.rs          # File creation, permission modification, and status
 ```
 
-### Resumo das Entidades
+### Summary of Entities
 
-| Módulo | Estrutura Principal | Responsabilidade Técnica |
+| Module | Main Structure | Technical Responsibility |
 | :--- | :--- | :--- |
-| **`Usuario`** | `uid: u16`, `grupos_ids: Vec<u16>` | Representa um usuário do sistema e rastreia os GIDs aos quais pertence. |
-| **`Grupo`** | `gid: u16`, `membros_uids: Vec<u16>` | Agrupa usuários através de seus UIDs, permitindo vínculo bidirecional. |
-| **`Diretorio`** | `arquivos: Vec<Arquivo>` | Atua como contêiner para arquivos, controlando adição, remoção e listagem. |
-| **`Arquivo`** | `permissoes: (Permissao, Permissao, Permissao)` | Armazena metadados (nome, tamanho em bytes, UID, GID) e exibe detalhes via `stat()`. |
-| **`Permissao`** | `leitura`, `escrita`, `execucao` (`bool`) | Calcula o valor octal (ex: `755`, `644`) para Dono, Grupo e Outros. |
+| **`Usuario`** | `uid: u16`, `grupos_ids: Vec<u16>` | Represents a system user and tracks the GIDs to which they belong. |
+| **`Grupo`** | `gid: u16`, `membros_uids: Vec<u16>` | Groups users via their UIDs, enabling a bidirectional link. |
+| **`Diretorio`** | `arquivos: Vec<Arquivo>` | Acts as a container for files, managing their addition, removal, and listing. |
+| **`File`** | `permissions: (Permission, Permission, Permission)` | Stores metadata (name, size in bytes, UID, GID) and displays details via `stat()`. |
+| **`Permission`** | `read`, `write`, `execute` (`bool`) | Calculates the octal value (e.g., `755`, `644`) for Owner, Group, and Others. |
 
 ---
 
-## 💻 Como Executar
+## 💻 How to Run
 
-### Pré-requisitos
-* Ter o ambiente **Rust** e o gerenciador **Cargo** instalados ([Guia oficial de instalação](https://www.rust-lang.org/pt-BR/tools/install)).
+### Prerequisites
+* Have the **Rust** environment and the **Cargo** package manager installed ([Official installation guide](https://www.rust-lang.org/tools/install)).
 
-### Passo a passo
-1. **Clone o repositório:**
-   ```bash
-   git clone [https://github.com/seu-usuario/seu-repositorio.git](https://github.com/seu-usuario/seu-repositorio.git)
-   cd seu-repositorio
-   ```
+### Step-by-Step
+1. **Clone the repository:**
+```bash
+git clone [https://github.com/MathBrito0/rust_CLI.git](https://github.com/MathBrito0/rust_CLI.git)
+cd your-repository
+```
 
-2. **Compile e inicie o programa:**
-   ```bash
-   cargo run
-   ```
+2. **Compile and run the program:**
+```bash
+cargo run
+```
 
-### Exemplo de Uso (Saída no Terminal)
+### Usage Example (Terminal Output)
 
 ```text
-=== MENU PRINCIPAL ===
-1. Menu dos usuários.
-2. Menu dos grupos.
-3. Menu dos diretórios.
-4. Menu dos arquivos.
-0. Finalizar o programa.
+=== MAIN MENU ===
+1. User menu.
+2. Group menu.
+3. Directory menu.
+4. File menu.
+0. Exit the program.
 > 4
 
-=== ARQUIVOS ===
-1. Criar arquivo
-2. Listar arquivos
-3. Ver stat
-4. Alterar permissão
-5. Remover arquivo
-0. Voltar
+=== FILES ===
+1. Create file
+2. List files
+3. View stats
+4. Change permissions
+5. Remove file
+0. Back
 > 3
-Nome do arquivo: relatorio.txt
-Arquivo: relatorio.txt
-Tamanho: 1024 bytes
-Permissoes:(664 / rw-rw-r--)
-Uid:1000
-Gid:100
+File name: relatorio.txt
+File: relatorio.txt
+Size: 1024 bytes
+Permissions: (664 / rw-rw-r--)
+UID: 1000
+GID: 100
 ```
 
 ---
 
-## 🔮 Melhorias Futuras (Roadmap)
+## 🔮 Future Improvements (Roadmap)
 
-- [ ] **Persistência de Dados:** Salvar e carregar o estado de usuários, grupos e arquivos em formato JSON ou binário (`serde`).
-- [ ] **Diretórios Aninhados:** Permitir que um diretório contenha subdiretórios de forma recursiva.
-- [ ] **Validação de Acesso:** Verificar efetivamente se o `UID` logado possui permissão de escrita/leitura antes de modificar um arquivo.
+- [ ] **Data Persistence:** Save and load the state of users, groups, and files in JSON or binary format (`serde`).
+- [ ] **Nested Directories:** Allow directories to contain subdirectories recursively.
+- [ ] **Access Validation:** Verify whether the logged-in `UID` has read/write permissions before modifying a file.
 
 ---
 
-## 👥 Autores
+## 👥 Authors
 
-| Desenvolvedores | 
+| Developers | 
 | :--- |
 | [@MathBrito0](https://github.com/MathBrito0) |
 | [@komodospit](https://github.com/komodospit) |
